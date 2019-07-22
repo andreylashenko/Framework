@@ -6,8 +6,8 @@ return [
         'action' => 'getStat',
         'method' => 'post',
     ],
-    'statistic/clear' => [
-        'controller' => 'statistic',
+    'record/clear' => [
+        'controller' => 'record',
         'action' => 'clear',
         'method' => 'post',
     ],

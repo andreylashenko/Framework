@@ -61,8 +61,6 @@ class Router {
         $controller = new $path($this->params);
         $content = str_replace('0=','' ,file_get_contents("php://input"));
 
-        file_put_contents('qwe.txt', urldecode($content));
-
         if($content) {
             $method = new ReflectionMethod($controller, $action);
             $resolver = new Resolver();
