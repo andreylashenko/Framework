@@ -93,12 +93,12 @@ class Statistic extends Model
 
             );
         }
-        //получаем кол-во записей
+        //получаем кол-во записей(FIXME total is not working)
         $sql = "SELECT count(*) as total FROM asteriskcdrdb.cdr WHERE ".$sql_condition." AND disposition LIKE 'ANSWERED' AND channel NOT LIKE 'Local/%' AND recordingfile NOT LIKE '' ";
 
 
-        $row = $this->db->row($sql);
-        if(isset($row) && isset($row->total)) 	$total = $row->total;
+        $row = $this->db->row($sql)[0];
+        if(isset($row) && isset($row['total'])) 	$total = $row['total'];
         else					$total = 0;
 
 
