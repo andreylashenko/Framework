@@ -108,7 +108,7 @@ class Statistic extends Model
             'total'	=> $total,
         );
 
-        return  $callArr;
+        return  $return_arr;
     }
 
     public function deleteTodayRecords(array $phones)
