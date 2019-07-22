@@ -130,6 +130,11 @@ class Statistic extends Model
             }
         }
 
-        return $deletedRecords;
+        $return_arr = array(
+            'status' 	=> 'success',
+            'data' 	=> $deletedRecords
+        );
+
+        return $return_arr;
     }
 }

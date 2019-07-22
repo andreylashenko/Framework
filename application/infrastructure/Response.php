@@ -10,7 +10,7 @@ class Response
     public static function json($data, $error = null) {
 
         if ($data) {
-            echo json_encode(["status" => "success", "data" => $data]);
+            echo json_encode(["status" => "success", $data]);
         } else {
             echo json_encode(["status" => false, "errors" => $error]);
         }
