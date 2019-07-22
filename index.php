@@ -5,11 +5,10 @@ ini_set('error_reporting', E_ALL);
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-#header('Content-type: application/json; charset=utf-8');
-
-
+header('Content-Type: application/json');
+ini_set("memory_limit", "800M");
+ini_set('max_execution_time', 0);
+set_time_limit(0);
 
 spl_autoload_register(function($class) {
     $path = str_replace('\\', '/', $class.'.php');
