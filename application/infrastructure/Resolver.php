@@ -37,17 +37,20 @@ class Resolver
 
         /** @var ReflectionParameter $param */
         foreach ($method->getParameters() as $param) {
-            $resolved = $this->resolve(urldecode($content), $param);
+            $resolved = $this->resolve($content, $param);
 
         }
 
         return $resolved;
     }
 
-    public function resolve($content, ReflectionParameter $parameter) {
+    public function resolve($content, ReflectionParameter $parameter)
+    {
         $type = (string)$parameter->getType();
-        $item = $this->deserialize($content, $type);
-        return $item;
+        if ($type !== 'string') {
+            $item = $this->deserialize($content, $type);
+            return $item;
+        }
     }
 
     /**

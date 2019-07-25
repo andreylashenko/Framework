@@ -59,12 +59,17 @@ class Router {
         }
 
         $controller = new $path($this->params);
-        $content = str_replace('0=','' ,file_get_contents("php://input"));
+        $content = urldecode(file_get_contents("php://input"));
+
+        $chunks = array_chunk(preg_split('/(=|&)/', $content), 2);
+        $result = array_combine(array_column($chunks, 0), array_column($chunks, 1));
 
         if($content) {
             $method = new ReflectionMethod($controller, $action);
             $resolver = new Resolver();
-            $controller->$action($resolver->getArguments($method, $content));
+            $data = $resolver->getArguments($method, $result["data"]);
+
+            $controller->$action($result["api_key"], $data);
         } else {
             $controller->$action();
         }

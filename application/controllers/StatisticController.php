@@ -13,10 +13,10 @@ use application\infrastructure\Response;
 class StatisticController extends Controller
 {
 
-    public function getStatAction(StatisticDto $statisticDto)
+    public function getStatAction(string $api_key, StatisticDto $statisticDto)
     {
 
-        if(!$statisticDto->apiKey || $statisticDto->apiKey !== self::API_KEY) {
+        if(!$api_key || $api_key !== self::API_KEY) {
             Response::json(null, 'api_key not found');
         }
 
