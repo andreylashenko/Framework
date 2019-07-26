@@ -14,9 +14,9 @@ use application\infrastructure\Response;
 class RecordController extends Controller
 {
 
-    public function clearAction(ClearRecordsDto $clearRecordsDto)
+    public function clearAction(string $api_key, ClearRecordsDto $clearRecordsDto)
     {
-        if(!$clearRecordsDto->apiKey || $clearRecordsDto->apiKey !== self::API_KEY) {
+        if(!$api_key || $api_key !== self::API_KEY) {
             Response::json(null, 'api_key not found');
         }
         Response::json($this->model->deleteTodayRecords($clearRecordsDto->phones));
