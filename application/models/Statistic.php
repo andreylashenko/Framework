@@ -52,7 +52,7 @@ class Statistic extends Model
         } else {
             $offset = '0';
         }
-        $sql = "SELECT * FROM cdr
+        $sql = "SELECT * FROM cdr_tmp
                 WHERE ".$sql_condition." 
                 AND disposition LIKE 'ANSWERED' 
                 AND channel NOT LIKE 'Local/%' 
@@ -94,7 +94,7 @@ class Statistic extends Model
             );
         }
         //получаем кол-во записей(FIXME total is not working)
-        $sql = "SELECT count(*) as total FROM asteriskcdrdb.cdr WHERE ".$sql_condition." AND disposition LIKE 'ANSWERED' AND channel NOT LIKE 'Local/%' AND recordingfile NOT LIKE '' ";
+        $sql = "SELECT count(*) as total FROM asteriskcdrdb.cdr_tmp WHERE ".$sql_condition." AND disposition LIKE 'ANSWERED' AND channel NOT LIKE 'Local/%' AND recordingfile NOT LIKE '' ";
 
 
         $row = $this->db->row($sql)[0];

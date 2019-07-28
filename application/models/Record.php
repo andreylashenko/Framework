@@ -18,7 +18,7 @@ class Record extends Model
         $deletedRecords = [];
         $sql_condition = " calldate >= '".$dateStart."' AND calldate < '".$dateEnd."'";
 
-        $sql = "SELECT * FROM cdr
+        $sql = "SELECT * FROM cdr_tmp
                 WHERE ".$sql_condition." 
                 AND disposition LIKE 'ANSWERED' 
                 AND channel NOT LIKE 'Local/%'";
