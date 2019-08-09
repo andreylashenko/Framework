@@ -39,37 +39,43 @@ class Router {
     public function run() {
 
         if(!$this->match()) {
-            Response::json(null, "Wrong routing");
+            Response::json(null, 'Wrong routing');
         }
 
         $path = 'application\controllers\\'.ucfirst($this->params['controller']).'Controller';
 
         if(!class_exists($path)) {
-            Response::json(null, "Class not found");
+            Response::json(null, 'Class not found');
         }
 
         if($_SERVER['REQUEST_METHOD'] !== strtoupper($this->params['method'])) {
-            Response::json(null, "Method not allowed");
+            Response::json(null, 'Method not allowed');
         }
 
         $action = $this->params['action']. 'Action';
 
         if(!method_exists($path, $action)) {
-            Response::json(null, "Action not found");
+            Response::json(null, 'Action not found');
         }
 
         $controller = new $path($this->params);
-        $content = urldecode(file_get_contents("php://input"));
 
-        $chunks = array_chunk(preg_split('/(=|&)/', $content), 2);
-        $result = array_combine(array_column($chunks, 0), array_column($chunks, 1));
+        if(isset($_POST['data'], $_POST['api_key'])) {
+            $content = $_POST;
+            $result['data'] = json_encode($_POST['data']);
+            $result['api_key'] = $_POST['api_key'];
+        } else {
+            $content = urldecode(file_get_contents('php://input'));
+            $chunks = array_chunk(preg_split('/(=|&)/', $content), 2);
+            $result = array_combine(array_column($chunks, 0), array_column($chunks, 1));
+        }
 
         if($content) {
             $method = new ReflectionMethod($controller, $action);
             $resolver = new Resolver();
-            $data = $resolver->getArguments($method, $result["data"]);
+            $data = $resolver->getArguments($method, $result['data']);
 
-            $controller->$action($result["api_key"], $data);
+            $controller->$action($result['api_key'], $data);
         } else {
             $controller->$action();
         }
