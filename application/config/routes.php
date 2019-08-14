@@ -6,7 +6,7 @@ return [
         'action' => 'getStat',
         'method' => 'post',
     ],
-    'statistic/getStat' => [
+    'statistic/getRecords' => [
         'controller' => 'statistic',
         'action' => 'getRecords',
         'method' => 'post',
