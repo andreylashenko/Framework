@@ -36,14 +36,14 @@ class StatisticDto
         $this->dateStart = $dateStart;
     }
 
-    public function getDataEnd()
+    public function getDateEnd()
     {
-        return $this->dataEnd;
+        return $this->dateEnd;
     }
 
-    public function setDataEnd($dataEnd)
+    public function setDateEnd($dateEnd)
     {
-        $this->dataEnd = $dataEnd;
+        $this->dateEnd = $dateEnd;
     }
 
     public function getExtension()

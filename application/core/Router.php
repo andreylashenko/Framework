@@ -62,7 +62,7 @@ class Router {
 
         if(isset($_POST['data'], $_POST['api_key'])) {
             $content = $_POST;
-            $result['data'] = json_encode($_POST['data']);
+            $result['data'] = gettype($_POST['data']) === 'string' ? $_POST['data'] : json_encode($_POST['data']);
             $result['api_key'] = $_POST['api_key'];
         } else {
             $content = urldecode(file_get_contents('php://input'));
