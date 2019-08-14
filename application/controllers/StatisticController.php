@@ -22,4 +22,14 @@ class StatisticController extends Controller
 
         Response::json($this->model->getRecords($statisticDto));
     }
+
+    public function getRecordsAction(string $api_key, StatisticDto $statisticDto)
+    {
+
+        if(!$api_key || $api_key !== self::API_KEY) {
+            Response::json(null, 'api_key not found');
+        }
+
+        Response::json($this->model->getTodayRecords($statisticDto));
+    }
 }

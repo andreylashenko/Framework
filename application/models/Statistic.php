@@ -12,15 +12,16 @@ use application\dto\StatisticDto;
 
 class Statistic extends Model
 {
+
+    private $wav_url = 'http://3.121.243.25/rec_wav_url';
+    private $mp3_url = 'http://3.121.243.25/rec_mp3_url';
+
     /**
      * @param StatisticDto $statisticDto
      * @return array
      */
     public function getRecords(StatisticDto $statisticDto)
     {
-
-        $wav_url = 'http://3.121.243.25/rec_wav_url';
-        $mp3_url = 'http://3.121.243.25/rec_mp3_url';
 
         if($statisticDto->dateStart) {
             $dateStart = trim($statisticDto->dateStart);
@@ -71,10 +72,10 @@ class Statistic extends Model
                 $rec_name = str_replace('.wav','',$row['recordingfile']);
                 if($cd[0] == date("Y-m-d")){
                     $rec_f = $rec_name.'.wav';
-                    $urlRecord = $wav_url.'/'.$ymd[0].'/'.$ymd[1].'/'.$ymd[2].'/'.$rec_f;
+                    $urlRecord = $this->wav_url.'/'.$ymd[0].'/'.$ymd[1].'/'.$ymd[2].'/'.$rec_f;
                 }else{
                     $rec_f = $rec_name.'.mp3';
-                    $urlRecord = $mp3_url.'/'.$ymd[0].'/'.$ymd[1].'/'.$ymd[2].'/'.$rec_f;
+                    $urlRecord = $this->mp3_url.'/'.$ymd[0].'/'.$ymd[1].'/'.$ymd[2].'/'.$rec_f;
                 }
             }
 
@@ -106,6 +107,77 @@ class Statistic extends Model
             'status' 	=> 'success',
             'data' 	=> $callArr,
             'total'	=> $total,
+        );
+
+        return  $return_arr;
+    }
+
+    /**
+     * @param StatisticDto $statisticDto
+     * @return array
+     */
+    public function getTodayRecords(StatisticDto $statisticDto)
+    {
+        if($statisticDto->dateStart) {
+            $dateStart = trim($statisticDto->dateStart);
+        } else {
+            $dateStart = '2018-01-01 00:00:00';
+        }
+
+        if($statisticDto->dateEnd) {
+            $dateEnd = trim($statisticDto->dateEnd);
+        } else {
+            $dateEnd = date("Y-m-d H:i:s", time());
+        }
+
+        $sql_condition = " calldate >= '".$dateStart."' AND calldate < '".$dateEnd."' ";
+
+        if($statisticDto->extension && is_array($statisticDto->extension)) {
+            $ext_search = implode(',',$statisticDto->extension);
+            $sql_condition .= " AND cnum IN (".$ext_search.") ";
+        }
+
+        $sql = "SELECT * FROM cdr
+                WHERE ".$sql_condition." 
+                AND disposition LIKE 'ANSWERED' 
+                AND channel NOT LIKE 'Local/%' 
+                AND recordingfile NOT LIKE ''  
+                ORDER BY calldate ASC";
+
+        $callArr = array();
+        foreach ($this->db->row($sql) as $row) {
+
+            $cd = explode(' ',$row['calldate']);
+            $ymd = explode('-',$cd[0]);
+
+            $urlRecord = '';
+            if(!empty($row['recordingfile'])){
+                $rec_name = str_replace('.wav','',$row['recordingfile']);
+                if($cd[0] == date("Y-m-d")){
+                    $rec_f = $rec_name.'.wav';
+                    $urlRecord = $this->wav_url.'/'.$ymd[0].'/'.$ymd[1].'/'.$ymd[2].'/'.$rec_f;
+                }
+            }
+
+            $callArr[] = array(
+                'calldate' => $row['calldate'],
+                'cnum' => $row['cnum'],
+                'dst' => $row['dst'],
+                'dstchannel' => $row['dstchannel'],
+                'channel' => $row['channel'],
+                'duration' => $row['duration'],
+                'billsec' => $row['billsec'],
+                'disposition' => $row['disposition'],
+                'uniqueid' => $row['uniqueid'],
+                'recordingfile' => $row['recordingfile'],
+                'urlrecord' => $urlRecord,
+
+            );
+        }
+
+        $return_arr = array(
+            'status' 	=> 'success',
+            'data' 	=> $callArr
         );
 
         return  $return_arr;
