@@ -156,6 +156,9 @@ class Statistic extends Model
                 if($cd[0] == date("Y-m-d")){
                     $rec_f = $rec_name.'.wav';
                     $urlRecord = $this->wav_url.'/'.$ymd[0].'/'.$ymd[1].'/'.$ymd[2].'/'.$rec_f;
+                }else{
+                    $rec_f = $rec_name.'.mp3';
+                    $urlRecord = $this->mp3_url.'/'.$ymd[0].'/'.$ymd[1].'/'.$ymd[2].'/'.$rec_f;
                 }
             }
 
