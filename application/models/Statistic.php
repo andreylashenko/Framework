@@ -14,7 +14,7 @@ class Statistic extends Model
 {
 
     private $wav_url = 'http://3.121.243.25/rec_wav_url';
-    private $mp3_url = 'http://3.121.243.25/rec_mp3_url';
+    private $mp3_url = 'https://asterisk.leadzvon.ru/records_mp3_url';
 
     /**
      * @param StatisticDto $statisticDto
