@@ -56,7 +56,17 @@ class Router
 
             }
 
-            echo call_user_func_array([new $class, $method], $methodArgs);
+            $reflectionClass = new \ReflectionClass($class);
+            $constructor = $reflectionClass->getConstructor();
+
+            $constructorArgs = [];
+            foreach ($constructor->getParameters() as $parameter) {
+                $constructorArgs[] = Dependecy::$singletons[$parameter->getClass()->getName()];
+            }
+
+            $class =  $reflectionClass->newInstanceArgs($constructorArgs);
+
+            echo call_user_func_array([$class, $method], $methodArgs);
         }
     }
 
