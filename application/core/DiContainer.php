@@ -1,25 +1,26 @@
 <?php
-
-
 namespace application\core;
-
 
 class DiContainer
 {
     private static $instances = [];
 
     private function __construct(){}
-
     private function __clone() {}
 
-    public static function getInstances() {
-        $subclass = static::class;
+    public static function setInstance($class, $definition) {
 
-        if(!isset(self::$instances[$subclass])) {
-            self::$instances[$subclass] = new static;
+        if(!isset(self::$instances[$class])) {
+            self::$instances[$class] = $definition;
         }
-
-        return self::$instances[$subclass];
     }
 
+    public static function getInstances($class) {
+
+        if(isset(self::$instances[$class])) {
+            return self::$instances[$class];
+        }
+
+        throw new ExceptionHandler(500, 'Cannot load class');
+    }
 }

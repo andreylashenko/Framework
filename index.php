@@ -13,6 +13,7 @@ spl_autoload_register(function($class) {
         require $class;
     }
 });
-(new Dependecy())->bootstrap();
+
+Dependecy::bootstrap();
 (new Router())->run();
 
