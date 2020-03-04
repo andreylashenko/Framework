@@ -1,5 +1,7 @@
 <?php
-namespace application\core;
+namespace application\core\di;
+
+use application\core\ExceptionHandler;
 
 class DiContainer
 {

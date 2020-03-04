@@ -2,7 +2,7 @@
 
 require 'application/lib/Dev.php';
 use application\core\Router;
-use application\core\Dependecy;
+use application\core\di\Dependecy;
 
 
 header('Content-Type: application/json');

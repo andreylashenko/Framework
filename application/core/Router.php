@@ -2,6 +2,7 @@
 
 namespace application\core;
 
+use application\core\di\DependencyLoader;
 use ReflectionMethod;
 
 class Router

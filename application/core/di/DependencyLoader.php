@@ -1,5 +1,5 @@
 <?php
-namespace application\core;
+namespace application\core\di;
 
 use ReflectionClass;
 
