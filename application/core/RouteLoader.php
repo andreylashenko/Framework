@@ -8,10 +8,9 @@ class RouteLoader
 
     public function __construct()
     {
-        $routes = require 'application/config/routes.php';
+        $routes = App::getRouter();
         $this->load($routes);
     }
-
 
     private function load(array $routes) {
         foreach ($routes as $route) {
