@@ -2,8 +2,7 @@
 
 require 'application/lib/Dev.php';
 use application\core\Router;
-use application\core\di\Dependecy;
-
+use application\core\di\Dependency;
 
 header('Content-Type: application/json');
 spl_autoload_register(function($class) {
@@ -13,7 +12,7 @@ spl_autoload_register(function($class) {
         require $class;
     }
 });
-
-Dependecy::bootstrap();
+Dependency::loadSystemDependencies();
+Dependency::bootstrap();
 (new Router())->run();
 
