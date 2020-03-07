@@ -1,6 +1,5 @@
 <?php
 
-require 'application/lib/Dev.php';
 use application\core\Router;
 use application\core\di\Dependency;
 

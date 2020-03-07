@@ -9,10 +9,12 @@ class DependencyLoader
 
         $reflectionClass = new ReflectionClass($class);
         $constructor = $reflectionClass->getConstructor();
-
         $constructorArgs = [];
-        foreach ($constructor->getParameters() as $parameter) {
-            $constructorArgs[] = DiContainer::getInstances($parameter->getClass()->getName());
+
+        if($constructor) {
+            foreach ($constructor->getParameters() as $parameter) {
+                $constructorArgs[] = DiContainer::getInstances($parameter->getClass()->getName());
+            }
         }
 
         return $reflectionClass->newInstanceArgs($constructorArgs);

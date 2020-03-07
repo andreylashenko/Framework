@@ -1,13 +1,12 @@
 <?php
 namespace application\core\di;
 
-use application\controller\Logger;
-use application\core\db\DbConnection;
+use application\core\database\DbConnection;
 
 class Dependency
 {
     public static function bootstrap() {
-        DiContainer::setInstance(Logger::class, new Logger());
+      //  DiContainer::setInstance(Logger::class, new Logger());
     }
 
     public static function loadSystemDependencies() {

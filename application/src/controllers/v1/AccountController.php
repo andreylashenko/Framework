@@ -1,5 +1,5 @@
 <?php
-namespace application\controller;
+namespace application\src\controllers\v1;
 
 use application\src\actions\account\AccountIndexAction;
 

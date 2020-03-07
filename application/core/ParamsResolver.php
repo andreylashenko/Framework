@@ -16,7 +16,6 @@ class ParamsResolver
     public function resolve(ReflectionMethod $object, array $params, array &$methodArgs) {
 
         foreach ($object->getParameters() as $parameter) {
-
             //обработка query параметров
             if (isset($params[$parameter->name])) {
                 $methodArgs[$parameter->name] = $params[$parameter->name];

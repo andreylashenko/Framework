@@ -4,6 +4,7 @@ namespace application\core;
 
 use application\core\di\DependencyLoader;
 use ReflectionMethod;
+use ReflectionClass;
 
 class Router
 {
@@ -34,8 +35,9 @@ class Router
     }
 
     private function match() {
-        $controller = isset($this->route[0]) ? $this->route[0] : null;
-        $action = isset($this->route[1]) ? $this->route[1] : null;
+        $prefix = $this->route[0];
+        $controller = isset($this->route[1]) ? $this->route[1] : null;
+        $action = isset($this->route[2]) ? $this->route[2] : null;
 
         if(!in_array($controller, $this->routes['controller'])) {
            throw new ExceptionHandler(404, 'undefined controller '. $controller);
@@ -45,19 +47,26 @@ class Router
             throw new ExceptionHandler(404, 'undefined action '. $action);
         }
 
-        $class = 'application\\controller\\'.ucfirst($controller).'Controller';
+        $class = 'application\\src\\controllers\\'. $prefix .'\\'. ucfirst($controller).'Controller';
         $method = 'action'.ucfirst($action);
 
         if (class_exists($class)) {
             $methodArgs = [];
-            $object = new ReflectionMethod($class, $method);
-            $this->paramsParser();
-            if($object->getParameters()) {
-                $this->paramResolver->resolve($object, $this->params, $methodArgs);
+            $object = new ReflectionClass($class);
+            $actions = $object->getMethod('actions')->invoke(new $class);
 
+            if(!isset($actions[$action])) {
+                throw new ExceptionHandler(404, 'method not found');
+            }
+            $targetClass = $actions[$action];
+            $targetMethod = new ReflectionMethod($targetClass, $method);
+            $this->paramsParser();
+
+            if($targetMethod->getParameters()) {
+                $this->paramResolver->resolve($targetMethod, $this->params, $methodArgs);
             }
 
-            $classObject =  DependencyLoader::loadConstructArgs($class);
+            $classObject =  DependencyLoader::loadConstructArgs($targetClass);
 
             echo call_user_func_array([$classObject, $method], $methodArgs);
         }

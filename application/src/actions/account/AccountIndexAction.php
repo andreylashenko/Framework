@@ -5,6 +5,6 @@ class AccountIndexAction
 {
     public function actionIndex(string $name, int $age) {
 
-        return json_encode(["res" => [$name, $age, $this->logger->log()]]);
+        return json_encode(["res" => [$name, $age]]);
     }
 }
