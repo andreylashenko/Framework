@@ -11,7 +11,7 @@ spl_autoload_register(function($class) {
         require $class;
     }
 });
-Dependency::loadSystemDependencies();
-Dependency::bootstrap();
+
+Dependency::run();
 (new Router())->run();
 
