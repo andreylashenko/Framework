@@ -37,7 +37,7 @@ class Dependency
             if (is_file($file)) {
                 $dependencies = require_once $file;
                 foreach ($dependencies as $key => $value) {
-                    DiContainer::setInstance($key, new $value);
+                    DiContainer::setInstance($key, DependencyLoader::loadConstructArgs($value));
                 }
             }
         }
