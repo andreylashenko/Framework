@@ -14,7 +14,6 @@ class DefaultEntityService implements DefaultEntityServiceInterface
 
     public function save(DefaultEntity $defaultEntity)
     {
-        die('asdasdasadasdad');
         $this->db->save($defaultEntity);
     }
 }

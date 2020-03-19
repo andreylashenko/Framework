@@ -1,7 +1,9 @@
 <?php
 namespace application\src\domain\defaultEntity\entity;
 
-class DefaultEntity
+use application\common\Entity;
+
+class DefaultEntity implements Entity
 {
 
 }

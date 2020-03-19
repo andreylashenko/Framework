@@ -20,7 +20,7 @@ class AccountIndexAction
 
     public function actionIndex(string $name, int $age) {
 
-        //$this->defaultEntityService->save(new DefaultEntity('Ivan', 23));
+        $this->defaultEntityService->save(new DefaultEntity('Ivan', 23));
         return json_encode(["res" => $this->defaultEntityRepository->test()]);
     }
 }

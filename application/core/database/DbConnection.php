@@ -6,7 +6,7 @@ use PDO;
 
 class DbConnection
 {
-    private $dbh;
+    private PDO $dbh;
 
     public function __construct()
     {
