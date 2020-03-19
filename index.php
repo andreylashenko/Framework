@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 1);
 
 use application\core\Router;
-use application\core\di\Dependency;
+use application\core\di\DependencyLoader;
 
 header('Content-Type: application/json');
 spl_autoload_register(function($class) {
@@ -14,6 +14,6 @@ spl_autoload_register(function($class) {
     }
 });
 
-Dependency::run();
+DependencyLoader::run();
 (new Router())->run();
 

@@ -3,7 +3,7 @@ namespace application\core\di;
 
 use application\core\ExceptionHandler;
 
-class DiContainer
+class Singleton
 {
     private static $instances = [];
 
