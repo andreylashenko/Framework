@@ -2,15 +2,14 @@
 namespace application\core\database;
 
 use application\core\App;
-use PDO;
+use RedBeanPHP\R;
 
 class DbConnection
 {
-    private PDO $dbh;
-
     public function __construct()
     {
         $db = App::getConfig('db');
-        $dbh = new PDO('mysql:host=' . $db['host']. ';dbname=' . $db['dbname'], $db['user'], $db['password']);
+        R::setup('mysql:host=' . $db['host']. ';dbname=' . $db['dbname'], $db['user'], $db['password']);
+        var_dump(R::testConnection());die;
     }
 }

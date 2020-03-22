@@ -14,6 +14,8 @@ spl_autoload_register(function($class) {
     }
 });
 
+require_once './vendor/autoload.php';
+
 DependencyLoader::run();
 (new Router())->run();
 
