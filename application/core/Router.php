@@ -54,10 +54,16 @@ class Router
             $methodArgs = [];
             $object = new ReflectionClass($class);
             $actions = $object->getMethod('actions')->invoke(new $class);
+            $httpType = call_user_func_array([new $class, 'behaviors'], [])['actions'];
+
+            if (!isset($httpType[$action]) || strtoupper($httpType[$action]) !== $_SERVER['REQUEST_METHOD']) {
+                throw new ExceptionHandler(500, 'method not allowed');
+            }
 
             if(!isset($actions[$action])) {
                 throw new ExceptionHandler(404, 'method not found');
             }
+
             $targetClass = $actions[$action];
             $targetMethod = new ReflectionMethod($targetClass, $method);
             $this->paramsParser();

@@ -21,7 +21,6 @@ class ParamsResolver
                 $methodArgs[$parameter->name] = $params[$parameter->name];
                 continue;
             }
-
             //обработка скаляров body параметров
             if (isset($params['body']->{$parameter->name})) {
                 $methodArgs[$parameter->name] = $params['body']->{$parameter->name};

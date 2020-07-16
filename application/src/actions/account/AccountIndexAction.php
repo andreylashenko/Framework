@@ -1,7 +1,7 @@
 <?php
 namespace application\src\actions\account;
 
-use application\src\domain\defaultEntity\entity\DefaultEntity;
+use application\src\domain\defaultEntity\dto\DefaultDto;
 use application\src\domain\defaultEntity\repository\DefaultEntityRepositoryInterface;
 use application\src\domain\defaultEntity\service\DefaultEntityServiceInterface;
 
@@ -18,8 +18,8 @@ class AccountIndexAction
         $this->defaultEntityService = $defaultEntityService;
     }
 
-    public function actionIndex(string $name, int $age) {
+    public function actionIndex(DefaultDto $defaultDto) {
 
-        return json_encode(["res" => $this->defaultEntityRepository->test()]);
+        return json_encode(["res" => $defaultDto]);
     }
 }

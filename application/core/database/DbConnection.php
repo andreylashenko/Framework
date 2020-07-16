@@ -10,6 +10,5 @@ class DbConnection
     {
         $db = App::getConfig('db');
         R::setup('mysql:host=' . $db['host']. ';dbname=' . $db['dbname'], $db['user'], $db['password']);
-        var_dump(R::testConnection());die;
     }
 }

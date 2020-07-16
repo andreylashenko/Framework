@@ -1,4 +1,5 @@
 <?php
+
 namespace application\core\di;
 
 use application\common\dependencies\DependenciesBootstrap;
