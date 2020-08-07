@@ -3,7 +3,7 @@
 namespace application\core\di;
 
 use application\common\dependencies\DependenciesBootstrap;
-use application\core\database\DbConnection;
+use application\core\system\database\DbConnection;
 use ReflectionClass;
 
 class DependencyLoader
@@ -48,6 +48,22 @@ class DependencyLoader
         if($constructor) {
             foreach ($constructor->getParameters() as $parameter) {
                 $constructorArgs[] = Singleton::getInstances($parameter->getClass()->getName());
+            }
+        }
+
+        return $reflectionClass->newInstanceArgs($constructorArgs);
+    }
+
+    public static function loadBaseConstructArgs(string $class) {
+
+        $reflectionClass = new ReflectionClass($class);
+        $constructorArgs = [];
+
+        if ($parentClass = $reflectionClass->getParentClass()) {
+            if($constructor = $parentClass->getConstructor()) {
+                foreach ($constructor->getParameters() as $parameter) {
+                    $constructorArgs[] = Singleton::getInstances($parameter->getClass()->getName());
+                }
             }
         }
 

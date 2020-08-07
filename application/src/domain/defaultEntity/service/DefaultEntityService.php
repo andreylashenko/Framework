@@ -1,7 +1,7 @@
 <?php
 namespace application\src\domain\defaultEntity\service;
 
-use application\core\database\DbConnection;
+use application\core\system\database\DbConnection;
 use application\src\domain\defaultEntity\entity\DefaultEntity;
 
 class DefaultEntityService implements DefaultEntityServiceInterface

@@ -53,8 +53,9 @@ class Router
         if (class_exists($class)) {
             $methodArgs = [];
             $object = new ReflectionClass($class);
-            $actions = $object->getMethod('actions')->invoke(new $class);
-            $httpType = call_user_func_array([new $class, 'behaviors'], [])['actions'];
+            $baseClass = DependencyLoader::loadBaseConstructArgs($class);
+            $actions = $object->getMethod('actions')->invoke($baseClass);
+            $httpType = call_user_func_array([$baseClass, 'behaviors'], [])['actions'];
 
             if (!isset($httpType[$action]) || strtoupper($httpType[$action]) !== $_SERVER['REQUEST_METHOD']) {
                 throw new ExceptionHandler(500, 'method not allowed');
@@ -77,6 +78,41 @@ class Router
             echo call_user_func_array([$classObject, $method], $methodArgs);
         }
     }
+    private function loadSystemClass() {
+
+        $controller = isset($this->route[0]) ? $this->route[0] : null;
+        $action = isset($this->route[1]) ? $this->route[1] : 'index';
+
+        $systemClass = 'application\\core\\system\\'. $controller . '\\' . ucfirst($controller).'Controller';
+        $method = 'action'.ucfirst($action);
+
+        if (class_exists($systemClass)) {
+            $methodArgs = [];
+            $object = new ReflectionClass($systemClass);
+            $actions = $object->getMethod($action)->invoke(new $systemClass);
+
+            $httpType = call_user_func_array([new $systemClass, 'behaviors'], [])['actions'];
+
+            if (!isset($httpType[$action]) || strtoupper($httpType[$action]) !== $_SERVER['REQUEST_METHOD']) {
+                throw new ExceptionHandler(500, 'method not allowed');
+            }
+
+
+          //  $targetClass = $actions[$action];
+
+            $targetMethod = new ReflectionMethod($systemClass, $action);
+
+            $this->paramsParser();
+
+            if($targetMethod->getParameters()) {
+                $this->paramResolver->resolve($targetMethod, $this->params, $methodArgs);
+            }
+
+            $classObject =  DependencyLoader::loadConstructArgs($systemClass);
+
+            echo call_user_func_array([$classObject, $action], $methodArgs);
+        }
+    }
 
     public function run() {
         $uri = $_SERVER['REQUEST_URI'];
@@ -89,8 +125,12 @@ class Router
 
         $this->route = explode('/', ltrim($route, '/'));
         $this->params = isset($uri_data[1]) ? explode('&', $uri_data[1]) : [];
+        if ($this->route[0] === 'v1') {
+            $this->match();
+        } else {
 
-        $this->match();
+            $this->loadSystemClass();
+        }
     }
 }
 
