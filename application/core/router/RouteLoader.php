@@ -1,6 +1,8 @@
 <?php
 
-namespace application\core;
+namespace application\core\router;
+
+use application\core\App;
 
 class RouteLoader
 {

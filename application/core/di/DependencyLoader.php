@@ -4,7 +4,6 @@ namespace application\core\di;
 
 use application\common\dependencies\DependenciesBootstrap;
 use application\core\system\database\DbConnection;
-use ReflectionClass;
 
 class DependencyLoader
 {
@@ -33,40 +32,9 @@ class DependencyLoader
             if (is_file($file)) {
                 $dependencies = require_once $file;
                 foreach ($dependencies as $key => $value) {
-                    Singleton::setInstance($key, self::loadConstructArgs($value));
+                    Singleton::setInstance($key, ConstructArgsLoader::loadConstructArgs($value));
                 }
             }
         }
-    }
-
-    public static function loadConstructArgs(string $class) {
-
-        $reflectionClass = new ReflectionClass($class);
-        $constructor = $reflectionClass->getConstructor();
-        $constructorArgs = [];
-
-        if($constructor) {
-            foreach ($constructor->getParameters() as $parameter) {
-                $constructorArgs[] = Singleton::getInstances($parameter->getClass()->getName());
-            }
-        }
-
-        return $reflectionClass->newInstanceArgs($constructorArgs);
-    }
-
-    public static function loadBaseConstructArgs(string $class) {
-
-        $reflectionClass = new ReflectionClass($class);
-        $constructorArgs = [];
-
-        if ($parentClass = $reflectionClass->getParentClass()) {
-            if($constructor = $parentClass->getConstructor()) {
-                foreach ($constructor->getParameters() as $parameter) {
-                    $constructorArgs[] = Singleton::getInstances($parameter->getClass()->getName());
-                }
-            }
-        }
-
-        return $reflectionClass->newInstanceArgs($constructorArgs);
     }
 }

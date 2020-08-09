@@ -1,6 +1,8 @@
 <?php
-namespace application\core;
 
+namespace application\core\resolver;
+
+use application\core\ExceptionHandler;
 use ReflectionMethod;
 use TypeError;
 
