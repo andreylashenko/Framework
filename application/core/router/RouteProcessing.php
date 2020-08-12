@@ -17,24 +17,18 @@ class RouteProcessing
         $this->paramResolver = new ParamsResolver();
     }
 
-    public function process(string $class, string $action, string $method, $params)
+    public function clientClassProcess(string $class, string $action, $params)
     {
-        $methodArgs = [];
-
         $this->checkHttpType(ConstructArgsLoader::loadBaseConstructArgs($class), $action);
-
         $targetClass = $this->checkActionsClass($class, $action);
-        $targetMethod = new ReflectionMethod($targetClass, $method);
+        $method = 'action'.ucfirst($action);
 
-        RouterParamsParser::parse($params);
+        $this->paramProcessing($targetClass, $method, $params);
+    }
 
-        if ($targetMethod->getParameters()) {
-            $this->paramResolver->resolve($targetMethod, $params, $methodArgs);
-        }
-
-        $classObject = ConstructArgsLoader::loadConstructArgs($targetClass);
-
-        echo call_user_func_array([$classObject, $method], $methodArgs);
+    public function systemClassProcess(string $class, string $action, $params)
+    {
+        $this->paramProcessing($class, $action, $params);
     }
 
     private function checkHttpType($class, $action)
@@ -61,5 +55,22 @@ class RouteProcessing
         }
 
         return $actions[$action];
+    }
+
+    private function paramProcessing($class, $method, $params)
+    {
+        $methodArgs = [];
+
+        $targetMethod = new ReflectionMethod($class, $method);
+
+        RouterParamsParser::parse($params);
+
+        if ($targetMethod->getParameters()) {
+            $this->paramResolver->resolve($targetMethod, $params, $methodArgs);
+        }
+
+        $classObject = ConstructArgsLoader::loadConstructArgs($class);
+
+        echo call_user_func_array([$classObject, $method], $methodArgs);
     }
 }

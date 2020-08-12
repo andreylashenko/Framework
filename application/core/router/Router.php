@@ -2,10 +2,8 @@
 
 namespace application\core\router;
 
-use application\core\di\ConstructArgsLoader;
 use application\core\ExceptionHandler;
 use application\core\resolver\ParamsResolver;
-use ReflectionMethod;
 
 class Router
 {
@@ -36,12 +34,11 @@ class Router
             throw new ExceptionHandler(404, 'undefined action '. $this->action);
         }
 
-        $class = 'application\\src\\controllers\\'. $this->route->getPrefix() .'\\'. ucfirst($this->controller).'Controller';
-        $method = 'action'.ucfirst($this->action);
+        $class = $this->route->getUserClassPath();
 
         if (class_exists($class)) {
             try {
-                $this->routeProcessing->process($class, $this->action, $method, $this->params);
+                $this->routeProcessing->clientClassProcess($class, $this->action, $this->params);
             } catch (ExceptionHandler $e) {
                 throw new ExceptionHandler(500, 'cannot process route');
             }
@@ -50,22 +47,10 @@ class Router
 
     private function loadSystemClass()
     {
-        $systemClass = 'application\\core\\system\\'. $this->controller . '\\' . ucfirst($this->controller).'Controller';
+        $class = $this->route->getSystemClassPath();
 
-        if (class_exists($systemClass)) {
-            $methodArgs = [];
-
-            $targetMethod = new ReflectionMethod($systemClass, $this->action);
-
-            RouterParamsParser::parse($this->params);
-
-            if($targetMethod->getParameters()) {
-                $this->paramResolver->resolve($targetMethod, $this->params, $methodArgs);
-            }
-
-            $classObject = ConstructArgsLoader::loadConstructArgs($systemClass);
-
-            echo call_user_func_array([$classObject, $this->action], $methodArgs);
+        if (class_exists($class)) {
+            $this->routeProcessing->systemClassProcess($class, $this->action, $this->params);
         }
     }
 
