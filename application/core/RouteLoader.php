@@ -12,7 +12,6 @@ class RouteLoader
         $this->load($routes);
     }
 
-
     private function load(array $routes) {
         foreach ($routes as $route) {
             $this->routes['controller'][] = $route['controller'];

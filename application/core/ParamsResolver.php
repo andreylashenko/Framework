@@ -30,17 +30,19 @@ class ParamsResolver
             }
 
             //обработка DTO классов
-            $className = $parameter->getClass()->name;
+            if (isset($parameter->getClass()->name)) {
+                $className = $parameter->getClass()->name;
 
-            $inputClass = new $className;
+                $inputClass = new $className;
 
-            if ($parameter->isVariadic()) {
-                $params = current(get_object_vars($params['body']));
-            } else {
-                $params = get_object_vars($params['body']);
-            }
-            foreach ($params as $key => $value) {
-                $methodArgs[$key] = $this->fillParams($inputClass, $key, $value);
+                if ($parameter->isVariadic()) {
+                    $params = current(get_object_vars($params['body']));
+                } else {
+                    $params = get_object_vars($params['body']);
+                }
+                foreach ($params as $key => $value) {
+                    $methodArgs[$key] = $this->fillParams($inputClass, $key, $value);
+                }
             }
         }
     }

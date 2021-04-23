@@ -19,6 +19,7 @@ class Router
     }
 
     private function paramsParser() {
+        //var_dump($this->params);
         if ($this->params) {
             foreach ($this->params as $cnt => $param) {
                 list($key, $value) = explode('=', $param);
@@ -57,7 +58,7 @@ class Router
 
             }
 
-            $classObject =  DependencyLoader::loadConstructArgs($class);
+            $classObject = DependencyLoader::loadConstructArgs($class);
 
             echo call_user_func_array([$classObject, $method], $methodArgs);
         }

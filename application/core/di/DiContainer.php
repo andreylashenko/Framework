@@ -23,6 +23,6 @@ class DiContainer
             return self::$instances[$class];
         }
 
-        throw new ExceptionHandler(500, 'Cannot load class');
+        throw new ExceptionHandler(500, 'Cannot load class '. $class);
     }
 }
