@@ -14,7 +14,7 @@ class ParamsResolver
      * @throws ExceptionHandler
      */
     public function resolve(ReflectionMethod $object, array $params, array &$methodArgs) {
-
+//1_2_3
         foreach ($object->getParameters() as $parameter) {
 
             //обработка query параметров
